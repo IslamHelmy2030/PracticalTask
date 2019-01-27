@@ -12,6 +12,6 @@ namespace PracticalTask.Data.PracticalDataModel
         [MaxLength(50), Required]
         public string Name { get; set; }
 
-        public bool IsActive { get; set; } = false;
+        public bool IsActive { get; set; } = true;
     }
 }

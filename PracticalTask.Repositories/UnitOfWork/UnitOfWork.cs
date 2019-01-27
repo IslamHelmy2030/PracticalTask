@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using PracticalTask.Repositories.Repository;
 using Microsoft.EntityFrameworkCore.Storage;
+using PracticalTask.Repositories.Repository;
+using System;
+using System.Threading.Tasks;
 
 namespace PracticalTask.Repositories.UnitOfWork
 {
@@ -13,36 +12,16 @@ namespace PracticalTask.Repositories.UnitOfWork
         private IDbContextTransaction _transaction;
 
         public IRepository<T> Repo { get; }
-        //public IAsyncRepository AsyncRepo { get; }
 
         public UnitOfWork(DbContext context)
         {
             _context = context;
-            //AsyncRepo = new AsyncRepository();
-            //context.Database.Initialize(force: false);
-            //context.Configuration.LazyLoadingEnabled = false;
-
-            //context.Configuration.ProxyCreationEnabled = false;
             Repo = new Repository<T>(context);
         }
 
-        public int SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            try
-            {
-                return _context.SaveChanges();
-            }
-            catch (DbEntityValidationException e)
-            {
-                var error = string.Empty;
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    error += $"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:";
-                    error = eve.ValidationErrors.Aggregate(error, (current, ve) => current + $"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");
-                    error += $"\n";
-                }
-                throw new Exception(error);
-            }
+            return await _context.SaveChangesAsync();
         }
 
         public void StartTransaction()
@@ -62,10 +41,6 @@ namespace PracticalTask.Repositories.UnitOfWork
             _transaction.Dispose();
         }
 
-        public void SetDbProxyStatus(bool enable)
-        {
-            _context.Configuration.ProxyCreationEnabled = enable;
-        }
         public void Dispose()
         {
             Dispose(true);
@@ -74,8 +49,16 @@ namespace PracticalTask.Repositories.UnitOfWork
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposing) return;
-            if (_context == null) return;
+            if (!disposing)
+            {
+                return;
+            }
+
+            if (_context == null)
+            {
+                return;
+            }
+
             _context.Dispose();
             _context = null;
         }
