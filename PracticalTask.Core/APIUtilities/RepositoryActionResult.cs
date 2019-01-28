@@ -2,41 +2,38 @@
 
 namespace PracticalTask.Core.APIUtilities
 {
-    public class RepositoryActionResult<T> : IRepositoryActionResult<T> where T : class
+    public class RepositoryActionResult : RepositoryResult, IRepositoryActionResult
     {
-        public T Data { get; set; }
-        public RepositoryActionStatus Status { get; set; }
         public Exception Exception { get; set; }
-        public string Message { get; set; }
-
-        public IRepositoryActionResult<T> GetRepositoryActionResult(Exception exception, string message = null)
+        public new RepositoryActionStatus Status { get; set; }
+        public IRepositoryActionResult GetRepositoryActionResult(Exception exception, string message = null)
         {
-            return new RepositoryActionResult<T>(exception, message);
+            return new RepositoryActionResult(exception, message);
         }
 
-        public IRepositoryActionResult<T> GetRepositoryActionResult(RepositoryActionStatus status, Exception exception, string message = null)
+        public IRepositoryActionResult GetRepositoryActionResult(RepositoryActionStatus status, Exception exception, string message = null)
         {
-            return new RepositoryActionResult<T>(status, exception, message);
+            return new RepositoryActionResult(status, exception, message);
         }
 
-        public IRepositoryActionResult<T> GetRepositoryActionResult(RepositoryActionStatus status, string message = null)
+        public IRepositoryActionResult GetRepositoryActionResult(RepositoryActionStatus status, string message = null)
         {
-            return new RepositoryActionResult<T>(status, message);
+            return new RepositoryActionResult(status, message);
         }
 
-        public IRepositoryActionResult<T> GetRepositoryActionResult(T result, RepositoryActionStatus status, Exception exception, string message = null)
+        public IRepositoryActionResult GetRepositoryActionResult(object result, RepositoryActionStatus status, Exception exception, string message = null)
         {
-            return new RepositoryActionResult<T>(result, status, exception, message);
+            return new RepositoryActionResult(result, status, exception, message);
         }
 
-        public IRepositoryActionResult<T> GetRepositoryActionResult(T result, RepositoryActionStatus status, string message = null)
+        public IRepositoryActionResult GetRepositoryActionResult(object result, RepositoryActionStatus status, string message = null)
         {
-            return new RepositoryActionResult<T>(result, status, message);
+            return new RepositoryActionResult(result, status, message);
         }
 
-        public IRepositoryActionResult<T> GetRepositoryActionResult(T result)
+        public IRepositoryActionResult GetRepositoryActionResult(object result)
         {
-            return new RepositoryActionResult<T>(result);
+            return new RepositoryActionResult(result);
         }
 
         private RepositoryActionResult(RepositoryActionStatus status, Exception exception, string message = null) : this(status)
@@ -57,14 +54,14 @@ namespace PracticalTask.Core.APIUtilities
             Message = message;
         }
 
-        private RepositoryActionResult(T result, RepositoryActionStatus status = RepositoryActionStatus.Ok, string message = null)
+        private RepositoryActionResult(object result, RepositoryActionStatus status = RepositoryActionStatus.Ok, string message = null)
         {
             Data = result;
             Status = status;
             Message = message;
         }
 
-        private RepositoryActionResult(T result, RepositoryActionStatus status, Exception exception, string message = null) : this(result, status)
+        private RepositoryActionResult(object result, RepositoryActionStatus status, Exception exception, string message = null) : this(result, status)
         {
             Exception = exception;
             Message = message;

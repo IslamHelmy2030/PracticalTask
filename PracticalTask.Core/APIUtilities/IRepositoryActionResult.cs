@@ -2,26 +2,23 @@
 
 namespace PracticalTask.Core.APIUtilities
 {
-    public interface IRepositoryActionResult<T> where T : class
+    public interface IRepositoryActionResult : IRepositoryResult
     {
-        T Data { get; set; }
-        RepositoryActionStatus Status { get; set; }
         Exception Exception { get; set; }
-        string Message { get; set; }
+        new RepositoryActionStatus Status { get; set; }
+        IRepositoryActionResult GetRepositoryActionResult(Exception exception, string message = null);
 
-        IRepositoryActionResult<T> GetRepositoryActionResult(Exception exception, string message = null);
-
-        IRepositoryActionResult<T> GetRepositoryActionResult(RepositoryActionStatus status, Exception exception,
+        IRepositoryActionResult GetRepositoryActionResult(RepositoryActionStatus status, Exception exception,
             string message = null);
 
-        IRepositoryActionResult<T> GetRepositoryActionResult(RepositoryActionStatus status, string message = null);
+        IRepositoryActionResult GetRepositoryActionResult(RepositoryActionStatus status, string message = null);
 
-        IRepositoryActionResult<T> GetRepositoryActionResult(T result, RepositoryActionStatus status,
+        IRepositoryActionResult GetRepositoryActionResult(object result, RepositoryActionStatus status,
             Exception exception, string message = null);
 
-        IRepositoryActionResult<T> GetRepositoryActionResult(T result, RepositoryActionStatus status,
+        IRepositoryActionResult GetRepositoryActionResult(object result, RepositoryActionStatus status,
             string message = null);
 
-        IRepositoryActionResult<T> GetRepositoryActionResult(T result);
+        IRepositoryActionResult GetRepositoryActionResult(object result);
     }
 }

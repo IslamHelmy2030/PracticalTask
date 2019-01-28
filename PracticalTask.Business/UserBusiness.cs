@@ -15,9 +15,10 @@ namespace PracticalTask.Business
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork<User> _unitOfWork;
-        private readonly IRepositoryActionResult<IList<IUserDto>> _repositoryActionListResult;
-        private readonly IRepositoryActionResult<IUserDto> _repositoryActionResult;
-        public UserBusiness(IMapper mapper, IUnitOfWork<User> unitOfWork, IRepositoryActionResult<IList<IUserDto>> repositoryActionListResult, IRepositoryActionResult<IUserDto> repositoryActionResult)
+        private readonly IRepositoryActionResult _repositoryActionListResult;
+        private readonly IRepositoryActionResult _repositoryActionResult;
+
+        public UserBusiness(IMapper mapper, IUnitOfWork<User> unitOfWork, IRepositoryActionResult repositoryActionListResult, IRepositoryActionResult repositoryActionResult)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -25,7 +26,7 @@ namespace PracticalTask.Business
             _repositoryActionResult = repositoryActionResult;
         }
 
-        public async Task<IRepositoryActionResult<IList<IUserDto>>> GetAllUsers()
+        public async Task<IRepositoryActionResult> GetAllUsers()
         {
             try
             {
@@ -44,7 +45,7 @@ namespace PracticalTask.Business
             }
         }
 
-        public async Task<IRepositoryActionResult<IUserDto>> AddUser(IUsernameParameterDto usernameParameter)
+        public async Task<IRepositoryActionResult> AddUser(IUsernameParameterDto usernameParameter)
         {
             try
             {
@@ -67,17 +68,17 @@ namespace PracticalTask.Business
             }
         }
 
-        public async Task<IRepositoryActionResult<IUserDto>> UpdateUser(IUserParameterDto userParameter)
+        public async Task<IRepositoryActionResult> UpdateUser(IUserParameterDto userParameter)
         {
             return await UpdateOrDeleteUser(userParameter: userParameter, isDeleteAction: false);
         }
 
-        public async Task<IRepositoryActionResult<IUserDto>> DeleteUser(IUserParameterDto userParameter)
+        public async Task<IRepositoryActionResult> DeleteUser(IUserParameterDto userParameter)
         {
             return await UpdateOrDeleteUser(userParameter: userParameter, isDeleteAction: true);
         }
 
-        private async Task<IRepositoryActionResult<IUserDto>> UpdateOrDeleteUser(IUserParameterDto userParameter,bool isDeleteAction)
+        private async Task<IRepositoryActionResult> UpdateOrDeleteUser(IUserParameterDto userParameter,bool isDeleteAction)
         {
             try
             {
