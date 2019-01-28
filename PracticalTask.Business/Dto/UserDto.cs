@@ -1,6 +1,6 @@
 ﻿namespace PracticalTask.Business.Dto
 {
-    public class UserDto
+    public class UserDto : IUserDto
     {
         public int UserId { get; set; }
 

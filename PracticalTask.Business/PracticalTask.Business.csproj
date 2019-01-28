@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PracticalTask.Core\PracticalTask.Core.csproj" />
     <ProjectReference Include="..\PracticalTask.Data\PracticalTask.Data.csproj" />
     <ProjectReference Include="..\PracticalTask.Repositories\PracticalTask.Repositories.csproj" />
   </ItemGroup>

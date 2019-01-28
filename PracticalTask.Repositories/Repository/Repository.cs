@@ -30,21 +30,17 @@ namespace PracticalTask.Repositories.Repository
             return await DbSet.FirstOrDefaultAsync(predicate);
         }
 
-
-
-        public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
+        public async Task<IList<T>> Find(Expression<Func<T, bool>> predicate)
         {
             return await DbSet.Where(predicate).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public async Task<IList<T>> Find(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
             var query = DbSet.OfType<T>();
             query = includes.Aggregate(query, (current, property) => current.Include(property));
             return await query.Where(predicate).ToListAsync();
         }
-
-
 
         public async Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
         {
@@ -52,12 +48,12 @@ namespace PracticalTask.Repositories.Repository
             return result.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IList<T>> GetAll()
         {
             return await DbSet.ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll(params Expression<Func<T, object>>[] includes)
+        public async Task<IList<T>> GetAll(params Expression<Func<T, object>>[] includes)
         {
             return await Find(x => TrueExpression, includes);
         }
@@ -121,6 +117,7 @@ namespace PracticalTask.Repositories.Repository
                     p => p.GetCustomAttributes(typeof(KeyAttribute), true).Length != 0);
             return key?.GetValue(t, null);
         }
+
         public async Task<bool> Contains(Expression<Func<T, bool>> predicate)
         {
             return await DbSet.AnyAsync(predicate);
