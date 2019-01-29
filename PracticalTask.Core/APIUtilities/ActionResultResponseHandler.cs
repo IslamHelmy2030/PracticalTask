@@ -14,7 +14,14 @@ namespace PracticalTask.Core.APIUtilities
             _repositoryResult = repositoryResult;
             _logger = logger;
         }
-
+        public IRepositoryResult GetResult(IRepositoryActionResult repositoryActionResult)
+        {
+            _repositoryResult.Status = GetHttpStatusCode(repositoryActionResult.Status);
+            _repositoryResult.Message = repositoryActionResult.Message;
+            if (!HasError(repositoryActionResult.Exception))
+                _repositoryResult.Data = repositoryActionResult.Data;
+            return _repositoryResult;
+        }
         private bool HasError(Exception exception)
         {
             if (exception == null) return false;
@@ -42,13 +49,6 @@ namespace PracticalTask.Core.APIUtilities
                 default: return HttpStatusCode.BadGateway;
             }
         }
-        public IRepositoryResult GetResult(IRepositoryActionResult repositoryActionResult)
-        {
-            _repositoryResult.Status = GetHttpStatusCode(repositoryActionResult.Status);
-            _repositoryResult.Message = repositoryActionResult.Message;
-            if (!HasError(repositoryActionResult.Exception))
-                _repositoryResult.Data = repositoryActionResult.Data;
-            return _repositoryResult;
-        }
+        
     }
 }

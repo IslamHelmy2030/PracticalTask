@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticalTask.Repositories"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticalTask.Core", "PracticalTask.Core\PracticalTask.Core.csproj", "{3858AAC6-34E9-4A63-B25A-2D13483E3602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticalTask.Api", "PracticalTask.Api\PracticalTask.Api.csproj", "{E459E512-331D-4901-BCBC-05E89619DBB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticalTask.Api", "PracticalTask.Api\PracticalTask.Api.csproj", "{E459E512-331D-4901-BCBC-05E89619DBB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

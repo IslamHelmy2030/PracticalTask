@@ -33,7 +33,7 @@ namespace PracticalTask.Business
                 var users = await _unitOfWork.Repo.Find(x => x.IsActive);
                 if (!users.Any())
                 {
-                    return _repositoryActionListResult.GetRepositoryActionResult(RepositoryActionStatus.NotFound);
+                    return _repositoryActionListResult.GetRepositoryActionResult(status: RepositoryActionStatus.NotFound,message:"No Users Found");
                 }
                 var userDtos = _mapper.Map<IList<User>, IList<IUserDto>>(users);
                 return _repositoryActionListResult.GetRepositoryActionResult(userDtos,RepositoryActionStatus.Ok);
@@ -51,7 +51,7 @@ namespace PracticalTask.Business
                 var user = await _unitOfWork.Repo.FirstOrDefault(x => x.Id == userId && x.IsActive);
                 if (user== null)
                 {
-                    return _repositoryActionListResult.GetRepositoryActionResult(RepositoryActionStatus.NotFound);
+                    return _repositoryActionListResult.GetRepositoryActionResult(status: RepositoryActionStatus.NotFound,message:"User Not Found");
                 }
                 var userDto = _mapper.Map<User, IUserDto>(user);
                 return _repositoryActionListResult.GetRepositoryActionResult(userDto, RepositoryActionStatus.Ok);
@@ -112,13 +112,13 @@ namespace PracticalTask.Business
             {
                 var user = await _unitOfWork.Repo.FirstOrDefault(x => x.Id == userId);
                 if (user == null)
-                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified, message: "Nothing was Seved");
+                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NotFound, message: "User Not Found");
                 user.IsActive = false;
                 _unitOfWork.Repo.Update(user);
                 var savingCount = await _unitOfWork.SaveChanges();
                 if (savingCount == 0)
                     return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified, message: "Nothing was Seved");
-                return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Updated, message: "Saved Successfully");
+                return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Updated, message: "Deleted Successfully");
             }
             catch (Exception e)
             {
