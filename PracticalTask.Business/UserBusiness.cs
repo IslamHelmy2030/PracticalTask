@@ -37,11 +37,11 @@ namespace PracticalTask.Business
                 }
 
                 var userDtos = _mapper.Map<IList<User>, IList<IUserDto>>(users);
-                return _repositoryActionListResult.GetRepositoryActionResult(userDtos);
+                return _repositoryActionListResult.GetRepositoryActionResult(userDtos,RepositoryActionStatus.Ok);
             }
             catch (Exception e)
             {
-                return _repositoryActionListResult.GetRepositoryActionResult(e, "Something went error");
+                return _repositoryActionListResult.GetRepositoryActionResult(exception:e,message: "Something went error",status:RepositoryActionStatus.Error);
             }
         }
 
@@ -51,20 +51,20 @@ namespace PracticalTask.Business
             {
                 if (string.IsNullOrWhiteSpace(usernameParameter?.Username))
                 {
-                    return _repositoryActionResult.GetRepositoryActionResult(exception: null, message: "Invalid Username");
+                    return _repositoryActionResult.GetRepositoryActionResult(message: "Invalid Username");
                 }
                 var user = _mapper.Map<IUsernameParameterDto, User>(usernameParameter);
                 var newUser = _unitOfWork.Repo.Add(user);
                 var savingCount = await _unitOfWork.SaveChanges();
                 if (savingCount == 0)
-                    return _repositoryActionResult.GetRepositoryActionResult(RepositoryActionStatus.NothingModified, "Nothing was Added");
+                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified,message: "Nothing was Added");
                 var userDto = _mapper.Map<User, IUserDto>(newUser);
                 return _repositoryActionResult.GetRepositoryActionResult(result: userDto,
                     status: RepositoryActionStatus.Created, message: "Saved Successfully");
             }
             catch (Exception e)
             {
-                return _repositoryActionResult.GetRepositoryActionResult(e, "Something went error");
+                return _repositoryActionResult.GetRepositoryActionResult(exception: e,message: "Something went error");
             }
         }
 
@@ -91,12 +91,12 @@ namespace PracticalTask.Business
                 _unitOfWork.Repo.Update(user);
                 var savingCount = await _unitOfWork.SaveChanges();
                 if (savingCount == 0)
-                    return _repositoryActionResult.GetRepositoryActionResult(RepositoryActionStatus.NothingModified, "Nothing was Seved");
+                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified,message: "Nothing was Seved");
                 return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Updated, message: "Saved Successfully");
             }
             catch (Exception e)
             {
-                return _repositoryActionResult.GetRepositoryActionResult(e, "Something went error");
+                return _repositoryActionResult.GetRepositoryActionResult(exception: e,message: "Something went error");
             }
         }
 

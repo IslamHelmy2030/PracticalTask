@@ -4,9 +4,10 @@ namespace PracticalTask.Data.PracticalDbContext
 {
     public partial class PracticalContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public PracticalContext(DbContextOptions<PracticalContext> options):base(options)
         {
-            optionsBuilder.UseSqlServer("data source=.;initial catalog=EvolvicPracticalTask;integrated security = True; MultipleActiveResultSets =True;");
+            
         }
+        
     }
 }

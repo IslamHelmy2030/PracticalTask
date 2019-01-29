@@ -7,6 +7,7 @@ namespace PracticalTask.Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Produces("application/json")]
     public class UserController : ControllerBase
     {
         private readonly IUserBusiness _userBusiness;

@@ -1,25 +1,54 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Patterns;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using PracticalTask.Business;
+using PracticalTask.Business.Dto;
+using PracticalTask.Business.Dto.Parameter;
+using PracticalTask.Core.APIUtilities;
+using PracticalTask.Data.PracticalDataModel;
+using PracticalTask.Data.PracticalDbContext;
+using PracticalTask.Repositories.Repository;
+using PracticalTask.Repositories.UnitOfWork;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace PracticalTask.Api
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<PracticalContext>(cfg => cfg.UseSqlServer(_configuration.GetConnectionString("PracticalTaskConnection")));
+
+            services.AddAutoMapper();
+            services.AddScoped<ILogger, Logger<User>>();
+            services.AddScoped<DbContext, PracticalContext>();
+            services.AddScoped<IRepository<User>, Repository<User>>();
+            services.AddScoped<IUnitOfWork<User>, UnitOfWork<User>>();
+            services.AddScoped<IUserBusiness, UserBusiness>();
+            
+            services.AddTransient<IActionResultResponseHandler, ActionResultResponseHandler>();
+            services.AddTransient<IRepositoryActionResult, RepositoryActionResult>();
+            services.AddTransient<IRepositoryResult, RepositoryResult>();
+            services.AddTransient<IUserDto, UserDto>();
+            services.AddTransient<IUserParameterDto, UserParameterDto>();
+            services.AddTransient<IUsernameParameterDto, UsernameParameterDto>();
+
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(cfg => cfg.SwaggerDoc("v1", new Info { Title = "Evolvice Practical Task API", Version = "v1" }));
