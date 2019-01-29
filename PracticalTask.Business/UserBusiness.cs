@@ -118,7 +118,7 @@ namespace PracticalTask.Business
                 var savingCount = await _unitOfWork.SaveChanges();
                 if (savingCount == 0)
                     return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified, message: "Nothing was Seved");
-                return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Updated, message: "Deleted Successfully");
+                return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Deleted, message: "Deleted Successfully");
             }
             catch (Exception e)
             {

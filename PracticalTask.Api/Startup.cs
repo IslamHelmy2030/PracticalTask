@@ -33,7 +33,11 @@ namespace PracticalTask.Api
 
             RegisterServices(services);
 
-
+            services.AddCors(options => options.AddPolicy("Cors", builder => {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(cfg => cfg.SwaggerDoc("v1", new Info { Title = "Evolvice Practical Task API", Version = "v1" }));
@@ -68,7 +72,7 @@ namespace PracticalTask.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("Cors");
             app.UseMvc();
 
 

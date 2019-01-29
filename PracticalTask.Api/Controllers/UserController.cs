@@ -52,7 +52,7 @@ namespace PracticalTask.Api.Controllers
             return result;
         }
 
-        [HttpDelete("DeleteUsername")]
+        [HttpDelete("DeleteUsername/{userId}")]
         public async Task<IRepositoryResult> DeleteUser(int userId)
         {
             var repositoryResult = await _userBusiness.DeleteUser(userId);
