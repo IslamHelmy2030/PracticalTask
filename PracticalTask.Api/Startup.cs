@@ -31,22 +31,7 @@ namespace PracticalTask.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<PracticalContext>(cfg => cfg.UseSqlServer(_configuration.GetConnectionString("PracticalTaskConnection")));
-
-            services.AddAutoMapper();
-            services.AddScoped<ILogger, Logger<User>>();
-            services.AddScoped<DbContext, PracticalContext>();
-            services.AddScoped<IRepository<User>, Repository<User>>();
-            services.AddScoped<IUnitOfWork<User>, UnitOfWork<User>>();
-            services.AddScoped<IUserBusiness, UserBusiness>();
-            
-            services.AddTransient<IActionResultResponseHandler, ActionResultResponseHandler>();
-            services.AddTransient<IRepositoryActionResult, RepositoryActionResult>();
-            services.AddTransient<IRepositoryResult, RepositoryResult>();
-            services.AddTransient<IUserDto, UserDto>();
-            services.AddTransient<IUserParameterDto, UserParameterDto>();
-            services.AddTransient<IUsernameParameterDto, UsernameParameterDto>();
-
+            RegisterServices(services);
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -54,6 +39,26 @@ namespace PracticalTask.Api
             services.AddSwaggerGen(cfg => cfg.SwaggerDoc("v1", new Info { Title = "Evolvice Practical Task API", Version = "v1" }));
 
 
+        }
+
+        private void RegisterServices(IServiceCollection services)
+        {
+            services.AddDbContext<PracticalContext>(cfg =>
+                cfg.UseSqlServer(_configuration.GetConnectionString("PracticalTaskConnection")));
+
+            services.AddAutoMapper();
+            services.AddScoped<ILogger, Logger<User>>();
+            services.AddScoped<DbContext, PracticalContext>();
+            services.AddScoped<IRepository<User>, Repository<User>>();
+            services.AddScoped<IUnitOfWork<User>, UnitOfWork<User>>();
+            services.AddScoped<IUserBusiness, UserBusiness>();
+
+            services.AddTransient<IActionResultResponseHandler, ActionResultResponseHandler>();
+            services.AddTransient<IRepositoryActionResult, RepositoryActionResult>();
+            services.AddTransient<IRepositoryResult, RepositoryResult>();
+            services.AddTransient<IUserDto, UserDto>();
+            services.AddTransient<UserParameterDto>();
+            services.AddTransient<UsernameParameterDto>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

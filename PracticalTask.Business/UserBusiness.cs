@@ -30,18 +30,35 @@ namespace PracticalTask.Business
         {
             try
             {
-                var users = await _unitOfWork.Repo.GetAll();
+                var users = await _unitOfWork.Repo.Find(x => x.IsActive);
                 if (!users.Any())
                 {
                     return _repositoryActionListResult.GetRepositoryActionResult(RepositoryActionStatus.NotFound);
                 }
-
                 var userDtos = _mapper.Map<IList<User>, IList<IUserDto>>(users);
                 return _repositoryActionListResult.GetRepositoryActionResult(userDtos,RepositoryActionStatus.Ok);
             }
             catch (Exception e)
             {
                 return _repositoryActionListResult.GetRepositoryActionResult(exception:e,message: "Something went error",status:RepositoryActionStatus.Error);
+            }
+        }
+
+        public async Task<IRepositoryActionResult> GetUser(int userId)
+        {
+            try
+            {
+                var user = await _unitOfWork.Repo.FirstOrDefault(x => x.Id == userId && x.IsActive);
+                if (user== null)
+                {
+                    return _repositoryActionListResult.GetRepositoryActionResult(RepositoryActionStatus.NotFound);
+                }
+                var userDto = _mapper.Map<User, IUserDto>(user);
+                return _repositoryActionListResult.GetRepositoryActionResult(userDto, RepositoryActionStatus.Ok);
+            }
+            catch (Exception e)
+            {
+                return _repositoryActionListResult.GetRepositoryActionResult(exception: e, message: "Something went error", status: RepositoryActionStatus.Error);
             }
         }
 
@@ -70,16 +87,6 @@ namespace PracticalTask.Business
 
         public async Task<IRepositoryActionResult> UpdateUser(IUserParameterDto userParameter)
         {
-            return await UpdateOrDeleteUser(userParameter: userParameter, isDeleteAction: false);
-        }
-
-        public async Task<IRepositoryActionResult> DeleteUser(IUserParameterDto userParameter)
-        {
-            return await UpdateOrDeleteUser(userParameter: userParameter, isDeleteAction: true);
-        }
-
-        private async Task<IRepositoryActionResult> UpdateOrDeleteUser(IUserParameterDto userParameter,bool isDeleteAction)
-        {
             try
             {
                 if (string.IsNullOrWhiteSpace(userParameter?.Username))
@@ -87,18 +94,39 @@ namespace PracticalTask.Business
                     return _repositoryActionResult.GetRepositoryActionResult(exception: null, message: "Invalid Username");
                 }
                 var user = _mapper.Map<IUserParameterDto, User>(userParameter);
-                if (isDeleteAction) user.IsActive = false;
                 _unitOfWork.Repo.Update(user);
                 var savingCount = await _unitOfWork.SaveChanges();
                 if (savingCount == 0)
-                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified,message: "Nothing was Seved");
+                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified, message: "Nothing was Seved");
                 return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Updated, message: "Saved Successfully");
             }
             catch (Exception e)
             {
-                return _repositoryActionResult.GetRepositoryActionResult(exception: e,message: "Something went error");
+                return _repositoryActionResult.GetRepositoryActionResult(exception: e, message: "Something went error");
             }
         }
+
+        public async Task<IRepositoryActionResult> DeleteUser(int userId)
+        {
+            try
+            {
+                var user = await _unitOfWork.Repo.FirstOrDefault(x => x.Id == userId);
+                if (user == null)
+                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified, message: "Nothing was Seved");
+                user.IsActive = false;
+                _unitOfWork.Repo.Update(user);
+                var savingCount = await _unitOfWork.SaveChanges();
+                if (savingCount == 0)
+                    return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.NothingModified, message: "Nothing was Seved");
+                return _repositoryActionResult.GetRepositoryActionResult(status: RepositoryActionStatus.Updated, message: "Saved Successfully");
+            }
+            catch (Exception e)
+            {
+                return _repositoryActionResult.GetRepositoryActionResult(exception: e, message: "Something went error");
+            }
+        }
+
+        
 
     }
 }
