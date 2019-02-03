@@ -40,7 +40,7 @@ namespace PracticalTask.Api
             }));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSwaggerGen(cfg => cfg.SwaggerDoc("v1", new Info { Title = "Evolvice Practical Task API", Version = "v1" }));
+            services.AddSwaggerGen(cfg => cfg.SwaggerDoc("v1", new Info { Title = "Practical Task API", Version = "v1" }));
 
 
         }
@@ -77,7 +77,7 @@ namespace PracticalTask.Api
 
 
             app.UseSwagger();
-            app.UseSwaggerUI(cfg => cfg.SwaggerEndpoint("/swagger/v1/swagger.json", "Evolvice Practical Task API V1"));
+            app.UseSwaggerUI(cfg => cfg.SwaggerEndpoint("/swagger/v1/swagger.json", "Practical Task API V1"));
         }
     }
 }
