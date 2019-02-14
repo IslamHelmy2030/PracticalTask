@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using PracticalTask.Repositories.Repository;
+using System;
 using System.Threading.Tasks;
-using PracticalTask.Repositories.Repository;
 
 namespace PracticalTask.Repositories.UnitOfWork
 {
